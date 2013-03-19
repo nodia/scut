@@ -63,6 +63,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="IRowParser.cs" />
     <Compile Include="RowsAddedEventArgs.cs" />
+    <Compile Include="RowsParsedEventArgs.cs" />
     <Compile Include="RowViewModel.cs" />
     <Compile Include="ScutSettings.cs" />
     <Page Include="MainWindow.xaml">

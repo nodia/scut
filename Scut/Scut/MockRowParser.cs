@@ -23,12 +23,12 @@ namespace Scut
         {
             const int columnCount = 4;
 
-            var args = new RowsAddedEventArgs();
-            args.AddedRows = new List<RowViewModel>();
+            var args = new RowsParsedEventArgs();
+            args.ParsedRows = new List<RowViewModel>();
             foreach (var i in Enumerable.Range(0, _random.Next(1, 3)))
             {
                 var rowViewModel = new RowViewModel { Data = Enumerable.Range(0, columnCount).Select(j => RandomString()).ToList() };
-                args.AddedRows.Add(rowViewModel);
+                args.ParsedRows.Add(rowViewModel);
             }
             OnRowsAdded(args);
         }
@@ -42,11 +42,11 @@ namespace Scut
                           .ToArray());
         }
 
-        public event EventHandler<RowsAddedEventArgs> RowsAdded;
+        public event EventHandler<RowsParsedEventArgs> RowsParsed;
 
-        protected virtual void OnRowsAdded(RowsAddedEventArgs e)
+        protected virtual void OnRowsAdded(RowsParsedEventArgs e)
         {
-            EventHandler<RowsAddedEventArgs> handler = RowsAdded;
+            EventHandler<RowsParsedEventArgs> handler = RowsParsed;
             if (handler != null) handler(this, e);
         }
     }
