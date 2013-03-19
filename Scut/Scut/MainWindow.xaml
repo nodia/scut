@@ -13,7 +13,7 @@
         <StackPanel>
             <Menu>
                 <MenuItem Header="_File">
-                    <MenuItem Command="ApplicationCommands.Open" Header="_Open" IsEnabled="True" Click="Open"></MenuItem>
+                    <MenuItem Command="ApplicationCommands.Open" Header="_Open" IsEnabled="True"></MenuItem>
                     <Separator></Separator>
                     <MenuItem Header="E_xit" Click="Exit"></MenuItem>
                 </MenuItem>
