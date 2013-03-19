@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace Scut
 {
@@ -39,7 +41,7 @@ namespace Scut
                 gridView.Columns.Add(new GridViewColumn
                 {
                     Header = columns[i].Name,
-                    DisplayMemberBinding = new Binding(string.Format("Data[{0}]", i))
+                    DisplayMemberBinding = new Binding(string.Format("Data[{0}]", i)),
                 });
             }
         }
@@ -53,6 +55,27 @@ namespace Scut
                 RowViewModel model = rowViewModel;
                 Dispatcher.Invoke(() => Rows.Add(model));
             }
+        }
+
+        private void Open(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog { DefaultExt = ".log", Filter = "Log files (*.log)|*.log|Text files (*.txt)|*.txt" };
+
+            if (dialog.ShowDialog() == true)
+            {
+                string filename = dialog.FileName;
+                // TODO Load the file
+            }
+        }
+
+        private void CommandBinding_OnCanOpenExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
