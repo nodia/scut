@@ -1,7 +1,7 @@
 Scut
 ====
 
-[Scut](http://en.wikipedia.org/wiki/Scut) is a tool for viewing and tailing plain old text logs created by Nodia Labs.
+[Scut](http://en.wikipedia.org/wiki/Scut) is a tool for viewing and tailing plain old text logs created by Nodia Labs. Binary can be found [here](http://dl.dropbox.com/u/25959245/Scut.exe).
 
 Features:
 ---------
