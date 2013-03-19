@@ -10,6 +10,7 @@ namespace Scut
         private FileSystemWatcher _watcher;
         private StreamReader _reader;
         public event EventHandler<RowsAddedEventArgs> RowsAdded;
+        public event EventHandler<RowsAddedEventArgs> FileOpened;
         private readonly string[] _splitters = new[] { Environment.NewLine, "\n" };
 
         public bool Watch(string path)
@@ -40,7 +41,7 @@ namespace Scut
                 _watcher = new FileSystemWatcher(pathName, fileName);
                 _reader = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
 
-                Task.Factory.StartNew(ReadToEnd);
+                Task.Factory.StartNew(() => ReadToEnd(true));
             }
             catch (ArgumentException)
             {
@@ -52,19 +53,32 @@ namespace Scut
             return true;
         }
 
-        private void ReadToEnd()
+        private void ReadToEnd(bool fileOpened = false)
         {
             var strings = _reader.ReadToEnd().Split(_splitters, StringSplitOptions.None).ToList();
             if (String.IsNullOrEmpty(strings.Last()))
             {
                 strings = strings.Take(strings.Count - 1).ToList();
             }
-            OnRowsAdded(new RowsAddedEventArgs { Rows = strings });
+            if (fileOpened)
+            {
+                OnFileOpened(new RowsAddedEventArgs { Rows = strings });
+            }
+            else
+            {
+                OnRowsAdded(new RowsAddedEventArgs { Rows = strings });
+            }
         }
 
         protected virtual void OnRowsAdded(RowsAddedEventArgs e)
         {
             EventHandler<RowsAddedEventArgs> handler = RowsAdded;
+            if (handler != null) handler(this, e);
+        }
+
+        protected virtual void OnFileOpened(RowsAddedEventArgs e)
+        {
+            EventHandler<RowsAddedEventArgs> handler = FileOpened;
             if (handler != null) handler(this, e);
         }
 
