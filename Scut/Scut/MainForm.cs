@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Xml;
 using DataFormats = System.Windows.DataFormats;
 
 namespace Scut
@@ -15,10 +17,6 @@ namespace Scut
         public MainForm()
         {
             InitializeComponent();
-
-            _settings = new ScutSettings();
-
-            CreateGrid(_settings.ColumnSettings);
         }
 
         private void CreateGrid(IEnumerable<ColumnSetting> columns)
@@ -105,27 +103,73 @@ namespace Scut
         {
             Properties.Settings.Default.MainWindowPlacement = WindowPlacement.GetPlacement(Handle);
             Properties.Settings.Default.Save();
+
+            SerializeSettings();
         }
 
         private void MainFormLoad(object sender, EventArgs e)
         {
             WindowPlacement.SetPlacement(Handle, Properties.Settings.Default.MainWindowPlacement);
+
+            DeserializeSettings();
+            CreateGrid(_settings.ColumnSettings);
         }
 
-        private void MainForm_DragOver(object sender, DragEventArgs e)
+        private void SerializeSettings()
+        {
+            const string fileName = "scutsettings.xml";
+            try
+            {
+                var serializer = new DataContractSerializer(typeof(ScutSettings), new[] { typeof(ContainsTextFilter) });
+                var settings = new XmlWriterSettings
+                {
+                    Indent = true,
+                    IndentChars = "\t"
+                };
+
+                using(var writer = XmlWriter.Create(new FileStream(fileName, FileMode.Create, FileAccess.Write), settings))
+                {
+                    serializer.WriteObject(writer, _settings);
+                }
+            }
+            catch
+            {
+                
+            }
+        }
+
+        private void DeserializeSettings()
+        {
+            try
+            {
+                const string fileName = "scutsettings.xml";
+                if (File.Exists(fileName))
+                {
+                    var serializer = new DataContractSerializer(typeof(ScutSettings), new[] { typeof(ContainsTextFilter) });
+                    using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                    {
+                        _settings = serializer.ReadObject(stream) as ScutSettings;
+                    }
+                }
+            }
+            catch
+            {
+                
+            }
+
+            if (_settings == null)
+            {
+                _settings = ScutSettings.CreateDefaults();
+            }
+        }
+
+        private void MainFormDragOver(object sender, DragEventArgs e)
         {
             var droppedFilePaths = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-            if (droppedFilePaths == null)
-            {
-                e.Effect = DragDropEffects.None;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.All;
-            }
+            e.Effect = droppedFilePaths == null ? DragDropEffects.None : DragDropEffects.All;
         }
 
-        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        private void MainFormDragDrop(object sender, DragEventArgs e)
         {
             var droppedFilePaths = e.Data.GetData(DataFormats.FileDrop, true) as string[];
             if (droppedFilePaths == null)

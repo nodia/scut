@@ -1,30 +1,36 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Scut
 {
+    [DataContract]
     public class ContainsTextFilter : IFilter
     {
         public ContainsTextFilter()
         {
-            StringComparison = StringComparison.InvariantCultureIgnoreCase;
+            IgnoreCase = true;
         }
 
+        [DataMember]
         public string Text { get; set; }
 
+        [DataMember]
         public bool Hide { get; set; }
 
-        public Color Color { get; set; }
+        [DataMember]
+        public Color? Color { get; set; }
 
-        public StringComparison StringComparison { get; set; }
+        [DataMember]
+        public bool IgnoreCase { get; set; }
 
         public void Filter(RowViewModel row)
         {
-            if (row.Raw.IndexOf(Text, StringComparison) >= 0)
+            if (row.Raw.IndexOf(Text, IgnoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture) >= 0)
             {
-                row.Color = Color;
-                row.Hidden = true;
+                if (Color.HasValue)
+                    row.Color = Color.Value;
+                row.Hidden = Hide;
             }
         }
     }
