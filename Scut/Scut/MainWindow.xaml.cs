@@ -5,7 +5,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace Scut
 {
@@ -23,6 +25,10 @@ namespace Scut
         {
             Rows = new ObservableCollection<RowViewModel>();
             InitializeComponent();
+
+            ScutSettings = new ScutSettings();
+
+            CreateGrid(ScutSettings.ColumnSettings);
         }
 
         private void CreateGrid(List<ColumnSetting> columns)
@@ -51,29 +57,6 @@ namespace Scut
             }));
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            ScutSettings = new ScutSettings();
-
-            _watcher = new FileWatcher();
-
-            const string filename = "testlog.txt";
-            var parser = new RowParser(ScutSettings, _watcher);
-            parser.RowsParsed += ParserOnRowsAdded;
-
-            var success = _watcher.Watch(filename);
-            if (success)
-            {
-                Title = "Tailing: " + Path.GetFullPath(filename);
-            }
-            else
-            {
-                Title = "Error opening: " + Path.GetFullPath(filename);
-            }
-
-            CreateGrid(ScutSettings.ColumnSettings);
-        }
-
         private void Open(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog { DefaultExt = ".log", Filter = "Log files (*.log)|*.log|Text files (*.txt)|*.txt" };
@@ -81,7 +64,20 @@ namespace Scut
             if (dialog.ShowDialog() == true)
             {
                 string filename = dialog.FileName;
-                // TODO Load the file
+
+                _watcher = new FileWatcher();
+                var parser = new RowParser(ScutSettings, _watcher);
+                parser.RowsParsed += ParserOnRowsAdded;
+
+                var success = _watcher.Watch(filename);
+                if (success)
+                {
+                    Title = "Tailing: " + Path.GetFullPath(filename);
+                }
+                else
+                {
+                    Title = "Error opening: " + Path.GetFullPath(filename);
+                }
             }
         }
 
