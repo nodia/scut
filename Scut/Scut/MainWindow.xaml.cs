@@ -47,18 +47,6 @@ namespace Scut
             }
         }
 
-        private void ParserOnRowsAdded(object sender, RowsParsedEventArgs rowsAddedEventArgs)
-        {
-            Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-            {
-                // inject into grid
-                foreach (var rowViewModel in rowsAddedEventArgs.ParsedRows)
-                {
-                    Rows.Add(rowViewModel);
-                }
-            }));
-        }
-
         private void Open(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog { DefaultExt = ".log", Filter = "Log files (*.log)|*.log|Text files (*.txt)|*.txt|All files|*.*" };
@@ -74,8 +62,8 @@ namespace Scut
         {
             Rows.Clear();
             _watcher = new FileWatcher();
-            var parser = new RowParser(ScutSettings, _watcher);
-            parser.RowsParsed += ParserOnRowsAdded;
+            _watcher.FileOpened += WatcherOnFileOpened;
+            _watcher.RowsAdded += WatcherOnRowsAdded;
 
             var success = _watcher.Watch(filename);
             if (success)
@@ -86,6 +74,29 @@ namespace Scut
             {
                 Title = "Error opening: " + Path.GetFullPath(filename);
             }
+        }
+
+        private void WatcherOnRowsAdded(object sender, RowsAddedEventArgs rowsAddedEventArgs)
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                // inject into grid
+                foreach (var row in rowsAddedEventArgs.Rows)
+                {
+                    Rows.Add(RowViewModel.Parse(ScutSettings, row));
+                }
+            }));
+        }
+
+        private void WatcherOnFileOpened(object sender, RowsAddedEventArgs rowsAddedEventArgs)
+        {
+            var collection = new ObservableCollection<RowViewModel>();
+            foreach (var row in rowsAddedEventArgs.Rows)
+            {
+                collection.Add(RowViewModel.Parse(ScutSettings, row));
+            }
+
+            Dispatcher.Invoke(() => Rows = collection);
         }
 
         private void CommandBinding_OnCanOpenExecute(object sender, CanExecuteRoutedEventArgs e)

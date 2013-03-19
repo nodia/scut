@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
-using System.Windows.Media;
 using Scut.Annotations;
 
 namespace Scut
@@ -41,18 +40,24 @@ namespace Scut
             }
         }
 
-        public IList<string> Data { get; set; }
+        public string[] Data { get; set; }
 
         public string Raw { get; set; }
 
-        public void Parse(ScutSettings settings)
+        public static RowViewModel Parse(ScutSettings settings, string row)
         {
-            Data = Raw.Split(settings.ColumnSeparator);
+            var rvm = new RowViewModel
+            {
+                Raw = row,
+                Data = row.Split(settings.ColumnSeparator)
+            };
 
             foreach (var filter in settings.Filters)
             {
-                filter.Filter(this);
+                filter.Filter(rvm);
             }
+
+            return rvm;
         }
     }
 }

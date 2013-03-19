@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace Scut
 {
@@ -7,7 +8,9 @@ namespace Scut
         [STAThread]
         public static void Main(string[] args)
         {
-            App.Main();
+            //App.Main();
+            var window = new MainForm();
+            Application.Run(window);
         }
     }
 }
