@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using Scut.Properties;
 
 namespace Scut
 {
@@ -122,6 +124,18 @@ namespace Scut
                 e.Effects = DragDropEffects.None;
                 e.Handled = true;
             }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Settings.Default.MainWindowPlacement = this.GetPlacement();
+            Settings.Default.Save();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            this.SetPlacement(Settings.Default.MainWindowPlacement);
         }
 
     }
