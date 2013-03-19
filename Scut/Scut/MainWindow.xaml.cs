@@ -64,20 +64,24 @@ namespace Scut
             if (dialog.ShowDialog() == true)
             {
                 string filename = dialog.FileName;
+                OpenFile(filename);
+            }
+        }
 
-                _watcher = new FileWatcher();
-                var parser = new RowParser(ScutSettings, _watcher);
-                parser.RowsParsed += ParserOnRowsAdded;
+        private void OpenFile(string filename)
+        {
+            _watcher = new FileWatcher();
+            var parser = new RowParser(ScutSettings, _watcher);
+            parser.RowsParsed += ParserOnRowsAdded;
 
-                var success = _watcher.Watch(filename);
-                if (success)
-                {
-                    Title = "Tailing: " + Path.GetFullPath(filename);
-                }
-                else
-                {
-                    Title = "Error opening: " + Path.GetFullPath(filename);
-                }
+            var success = _watcher.Watch(filename);
+            if (success)
+            {
+                Title = "Tailing: " + Path.GetFullPath(filename);
+            }
+            else
+            {
+                Title = "Error opening: " + Path.GetFullPath(filename);
             }
         }
 
@@ -97,5 +101,28 @@ namespace Scut
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
+
+        private void MainWindow_OnDrop(object sender, DragEventArgs e)
+        {
+            var droppedFilePaths = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+            if (droppedFilePaths == null)
+            {
+                return;
+            }
+
+            var file = droppedFilePaths[0];
+            OpenFile(file);
+        }
+
+        private void CanDrop(object sender, DragEventArgs e)
+        {
+            var droppedFilePaths = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+            if (droppedFilePaths == null)
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+            }
+        }
+
     }
 }
