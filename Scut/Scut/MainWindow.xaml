@@ -9,21 +9,23 @@
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="Open" />
     </Window.InputBindings>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-        <StackPanel>
-            <Menu>
-                <MenuItem Header="_File">
-                    <MenuItem Command="ApplicationCommands.Open" Header="_Open" IsEnabled="True"></MenuItem>
-                    <Separator></Separator>
-                    <MenuItem Header="E_xit" Click="Exit"></MenuItem>
-                </MenuItem>
-            </Menu>
-            <ListView Name="logView" ItemsSource="{Binding Rows}">
-                <ListView.View>
-                    <GridView>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
-    </ScrollViewer>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Command="ApplicationCommands.Open" Header="_Open" IsEnabled="True"></MenuItem>
+                <Separator></Separator>
+                <MenuItem Header="E_xit" Click="Exit"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <ListView Name="logView" ItemsSource="{Binding Rows}" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
 </Window>

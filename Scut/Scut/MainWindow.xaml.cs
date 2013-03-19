@@ -72,6 +72,7 @@ namespace Scut
 
         private void OpenFile(string filename)
         {
+            Rows.Clear();
             _watcher = new FileWatcher();
             var parser = new RowParser(ScutSettings, _watcher);
             parser.RowsParsed += ParserOnRowsAdded;
