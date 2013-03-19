@@ -1,65 +1,72 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Scut
 {
-    public class FileWatcher : IDisposable
+    public class FileWatcher
     {
-        private FileSystemWatcher _watcher;
-        private StreamReader _reader;
         public event EventHandler<RowsAddedEventArgs> RowsAdded;
         public event EventHandler<RowsAddedEventArgs> FileOpened;
+
         private readonly string[] _splitters = new[] { Environment.NewLine, "\n" };
+        protected const int SleepTime = 100;
+
+        private bool _running;
+        private StreamReader _reader;
+
+        public long OldLinesCount { get; set; }
+
+        public FileWatcher()
+        {
+            OldLinesCount = -1;
+        }
 
         public bool Watch(string path)
         {
-            if (_watcher != null)
-            {
-                _watcher.Dispose();
-            }
-
-            if (_reader != null)
-            {
-                _reader.Dispose();
-            }
-
+            _running = false;
             try
             {
                 if (!File.Exists(path))
                 {
                     return false;
                 }
-                var pathName = Path.GetDirectoryName(Path.GetFullPath(path));
-                var fileName = Path.GetFileName(path);
-                if (pathName == null || fileName == null)
+
+                var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 1024, true);
+                if (OldLinesCount > -1)
                 {
-                    return false;
+                    fileStream.Seek(Math.Max(0, fileStream.Length - OldLinesCount), SeekOrigin.Begin);
                 }
+                _reader = new StreamReader(fileStream);
 
-                _watcher = new FileSystemWatcher(pathName, fileName);
-                _reader = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
+                _running = true;
+                ReadToEnd(true);
 
-                Task.Factory.StartNew(() => ReadToEnd(true));
+                Task.Factory.StartNew(Run);
             }
             catch (ArgumentException)
             {
                 return false;
             }
 
-            _watcher.Changed += WatcherChanged;
-            _watcher.EnableRaisingEvents = true;
             return true;
         }
 
         private void ReadToEnd(bool fileOpened = false)
         {
             var strings = _reader.ReadToEnd().Split(_splitters, StringSplitOptions.None).ToList();
+
+            if (strings.Count == 0) return;
+
             if (String.IsNullOrEmpty(strings.Last()))
             {
                 strings = strings.Take(strings.Count - 1).ToList();
             }
+
+            if (strings.Count == 0) return;
+
             if (fileOpened)
             {
                 OnFileOpened(new RowsAddedEventArgs { Rows = strings });
@@ -67,6 +74,46 @@ namespace Scut
             else
             {
                 OnRowsAdded(new RowsAddedEventArgs { Rows = strings });
+            }
+        }
+
+        public void Stop()
+        {
+            _running = false;
+        }
+
+        private void Run()
+        {
+            try
+            {
+                while (_running)
+                {
+                    try
+                    {
+                        Thread.Sleep(SleepTime);
+                        ReadToEnd();
+                    }
+                    catch (ThreadInterruptedException)
+                    {
+                        Thread.Sleep(50);
+                    }
+                    catch (Exception)
+                    {
+                        _running = false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+            finally
+            {
+                if (_reader != null)
+                {
+                    _reader.Dispose();
+                    _reader = null;
+                }
             }
         }
 
@@ -80,31 +127,6 @@ namespace Scut
         {
             EventHandler<RowsAddedEventArgs> handler = FileOpened;
             if (handler != null) handler(this, e);
-        }
-
-        private void WatcherChanged(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType == WatcherChangeTypes.Changed)
-            {
-                ReadToEnd();
-            }
-
-            // TODO: handle deletions etc.
-        }
-
-        public void Dispose()
-        {
-            if (_watcher != null)
-            {
-                _watcher.Dispose();
-                _watcher = null;
-            }
-
-            if (_reader != null)
-            {
-                _reader.Dispose();
-                _reader = null;
-            }
         }
     }
 }
