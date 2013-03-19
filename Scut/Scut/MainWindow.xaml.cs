@@ -59,7 +59,7 @@ namespace Scut
 
         private void Open(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog { DefaultExt = ".log", Filter = "Log files (*.log)|*.log|Text files (*.txt)|*.txt" };
+            var dialog = new OpenFileDialog { DefaultExt = ".log", Filter = "Log files (*.log)|*.log|Text files (*.txt)|*.txt|All files|*.*" };
 
             if (dialog.ShowDialog() == true)
             {
