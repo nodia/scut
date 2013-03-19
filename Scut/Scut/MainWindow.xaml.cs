@@ -27,7 +27,7 @@ namespace Scut
 
             CreateGrid(ScutSettings.ColumnSettings);
 
-            RowParser.RowsAdded += ParserOnRowsAdded;
+            RowParser.RowsParsed += ParserOnRowsAdded;
         }
 
         private void CreateGrid(List<ColumnSetting> columns)
@@ -44,10 +44,10 @@ namespace Scut
             }
         }
 
-        private void ParserOnRowsAdded(object sender, RowsAddedEventArgs rowsAddedEventArgs)
+        private void ParserOnRowsAdded(object sender, RowsParsedEventArgs rowsAddedEventArgs)
         {
             // inject into grid
-            foreach (var rowViewModel in rowsParsedEventArgs.AddedRows)
+            foreach (var rowViewModel in rowsAddedEventArgs.ParsedRows)
             {
                 Console.WriteLine(String.Join(", ", rowViewModel.Data));
                 RowViewModel model = rowViewModel;
