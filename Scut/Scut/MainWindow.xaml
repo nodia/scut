@@ -9,7 +9,7 @@
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="Open" />
     </Window.InputBindings>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
         <StackPanel>
             <Menu>
                 <MenuItem Header="_File">
