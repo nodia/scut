@@ -19,7 +19,7 @@ namespace Scut
             Filters = new List<IFilter>
             {
                 new ContainsTextFilter { Color = Color.GreenYellow, Text = "packet" },
-                new ContainsTextFilter { Hide = true, Text = "repository" }
+                new ContainsTextFilter { Hide = true, Text = "Start" }
             };
         }
 

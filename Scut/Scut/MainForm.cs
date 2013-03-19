@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using DataFormats = System.Windows.DataFormats;
 
@@ -26,15 +27,21 @@ namespace Scut
             {
                 gridView.Columns.Add(column.Name, column.Name);
             }
+
+            foreach (DataGridViewColumn column in gridView.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                column.Resizable = DataGridViewTriState.True;
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
         }
 
         private void OpenFile(string filename)
         {
             gridView.Rows.Clear();
             _watcher = new FileWatcher();
-            //_watcher.FileOpened += WatcherOnFileOpened;
-            _watcher.RowsAdded += WatcherOnRowsAdded;
             _watcher.FileOpened += WatcherOnRowsAdded;
+            _watcher.RowsAdded += WatcherOnRowsAdded;
 
             var success = _watcher.Watch(filename);
             if (success)
@@ -65,22 +72,21 @@ namespace Scut
 
         private void WatcherOnRowsAdded(object sender, RowsAddedEventArgs rowsAddedEventArgs)
         {
-            BeginInvoke(new Action(() =>
-            {
-                // inject into grid
-                foreach (var row in rowsAddedEventArgs.Rows)
-                {
-                    AddRow(RowViewModel.Parse(_settings, row));
-                }
-            }));
+            BeginInvoke(new Action(() => AddRows(rowsAddedEventArgs.Rows)));
         }
 
-        private void AddRow(RowViewModel row)
+        private void AddRows(IEnumerable<string> rows)
         {
-            var dgrow = new DataGridViewRow();
-            dgrow.CreateCells(gridView, row.Data);
-            dgrow.DefaultCellStyle.BackColor = row.Color;
-            gridView.Rows.Add(dgrow);
+            var asd = rows.Select(row =>
+            {
+                var model = RowViewModel.Parse(_settings, row);
+                var dgrow = new DataGridViewRow();
+                dgrow.CreateCells(gridView, model.Data);
+                dgrow.DefaultCellStyle.BackColor = model.Color;
+                dgrow.Visible = !model.Hidden;
+                return dgrow;
+            }).ToArray();
+            gridView.Rows.AddRange(asd);
         }
 
         private void MainFormFormClosing(object sender, FormClosingEventArgs e)
@@ -119,17 +125,5 @@ namespace Scut
             OpenFile(file);
         }
 
-        /*
-        private void WatcherOnFileOpened(object sender, RowsAddedEventArgs rowsAddedEventArgs)
-        {
-            var collection = new ObservableCollection<RowViewModel>();
-            foreach (var row in rowsAddedEventArgs.Rows)
-            {
-                collection.Add(RowViewModel.Parse(ScutSettings, row));
-            }
-
-            Dispatcher.Invoke(() => Rows = collection);
-        }
-         */
     }
 }
