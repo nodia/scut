@@ -77,7 +77,7 @@ namespace Scut
 
         private void AddRows(IEnumerable<string> rows)
         {
-            var asd = rows.Select(row =>
+            var rowArray = rows.Select(row =>
             {
                 var model = RowViewModel.Parse(_settings, row);
                 var dgrow = new DataGridViewRow();
@@ -86,7 +86,19 @@ namespace Scut
                 dgrow.Visible = !model.Hidden;
                 return dgrow;
             }).ToArray();
-            gridView.Rows.AddRange(asd);
+            gridView.Rows.AddRange(rowArray);
+
+            if (!toolStripButtonScrollLock.Checked) return;
+
+            for (int index = gridView.Rows.Count - 1; index > 0; index--)
+            {
+                var dataGridViewRow = gridView.Rows[index];
+                if (dataGridViewRow.Visible)
+                {
+                    gridView.FirstDisplayedScrollingRowIndex = index;
+                    return;
+                }
+            }
         }
 
         private void MainFormFormClosing(object sender, FormClosingEventArgs e)

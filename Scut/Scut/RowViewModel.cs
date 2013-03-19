@@ -57,6 +57,11 @@ namespace Scut
                 filter.Filter(rvm);
             }
 
+            if (rvm.Data.Length != settings.ColumnSettings.Count)
+            {
+                rvm.Color = Color.DarkSalmon;
+            }
+
             return rvm;
         }
     }
