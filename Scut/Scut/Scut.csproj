@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Scut.EntryPoint</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -50,9 +53,18 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="ColumnSetting.cs" />
+    <Compile Include="FileWatcher.cs" />
+    <Compile Include="EntryPoint.cs" />
+    <Compile Include="MockRowParser.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="IRowParser.cs" />
+    <Compile Include="RowsAddedEventArgs.cs" />
+    <Compile Include="RowViewModel.cs" />
+    <Compile Include="ScutSettings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
