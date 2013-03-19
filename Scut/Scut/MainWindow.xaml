@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="Scut" Height="350" Width="525">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="Open" CanExecute="CommandBinding_OnCanOpenExecute" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open" />
+    </Window.InputBindings>
     <ScrollViewer>
-        <Window.CommandBindings>
-            <CommandBinding Command="ApplicationCommands.Open" Executed="Open" CanExecute="CommandBinding_OnCanOpenExecute" />
-        </Window.CommandBindings>
-        <Window.InputBindings>
-            <KeyBinding Key="O" Modifiers="Control" Command="Open" />
-        </Window.InputBindings>
         <StackPanel>
             <Menu>
                 <MenuItem Header="_File">
