@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using Scut.Properties;
 
 namespace Scut
 {
@@ -59,25 +61,29 @@ namespace Scut
 
         private void Open(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog { DefaultExt = ".log", Filter = "Log files (*.log)|*.log|Text files (*.txt)|*.txt" };
+            var dialog = new OpenFileDialog { DefaultExt = ".log", Filter = "Log files (*.log)|*.log|Text files (*.txt)|*.txt|All files|*.*" };
 
             if (dialog.ShowDialog() == true)
             {
                 string filename = dialog.FileName;
+                OpenFile(filename);
+            }
+        }
 
-                _watcher = new FileWatcher();
-                var parser = new RowParser(ScutSettings, _watcher);
-                parser.RowsParsed += ParserOnRowsAdded;
+        private void OpenFile(string filename)
+        {
+            _watcher = new FileWatcher();
+            var parser = new RowParser(ScutSettings, _watcher);
+            parser.RowsParsed += ParserOnRowsAdded;
 
-                var success = _watcher.Watch(filename);
-                if (success)
-                {
-                    Title = "Tailing: " + Path.GetFullPath(filename);
-                }
-                else
-                {
-                    Title = "Error opening: " + Path.GetFullPath(filename);
-                }
+            var success = _watcher.Watch(filename);
+            if (success)
+            {
+                Title = "Tailing: " + Path.GetFullPath(filename);
+            }
+            else
+            {
+                Title = "Error opening: " + Path.GetFullPath(filename);
             }
         }
 
@@ -97,5 +103,40 @@ namespace Scut
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
+
+        private void MainWindow_OnDrop(object sender, DragEventArgs e)
+        {
+            var droppedFilePaths = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+            if (droppedFilePaths == null)
+            {
+                return;
+            }
+
+            var file = droppedFilePaths[0];
+            OpenFile(file);
+        }
+
+        private void CanDrop(object sender, DragEventArgs e)
+        {
+            var droppedFilePaths = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+            if (droppedFilePaths == null)
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+            }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Settings.Default.MainWindowPlacement = this.GetPlacement();
+            Settings.Default.Save();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            this.SetPlacement(Settings.Default.MainWindowPlacement);
+        }
+
     }
 }
