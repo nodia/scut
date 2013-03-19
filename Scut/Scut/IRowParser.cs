@@ -4,6 +4,6 @@ namespace Scut
 {
     public interface IRowParser
     {
-        event EventHandler<RowsAddedEventArgs> RowsAdded;
+        event EventHandler<RowsParsedEventArgs> RowsParsed;
     }
 }

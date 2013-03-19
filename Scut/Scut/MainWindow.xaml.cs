@@ -47,7 +47,7 @@ namespace Scut
         private void ParserOnRowsAdded(object sender, RowsAddedEventArgs rowsAddedEventArgs)
         {
             // inject into grid
-            foreach (var rowViewModel in rowsAddedEventArgs.AddedRows)
+            foreach (var rowViewModel in rowsParsedEventArgs.AddedRows)
             {
                 Console.WriteLine(String.Join(", ", rowViewModel.Data));
                 RowViewModel model = rowViewModel;

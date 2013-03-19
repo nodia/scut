@@ -23,7 +23,7 @@ namespace Scut
         {
             const int columnCount = 4;
 
-            var args = new RowsAddedEventArgs();
+            var args = new RowsParsedEventArgs();
             args.AddedRows = new List<RowViewModel>();
             foreach (var i in Enumerable.Range(0, _random.Next(1, 3)))
             {
@@ -42,11 +42,11 @@ namespace Scut
                           .ToArray());
         }
 
-        public event EventHandler<RowsAddedEventArgs> RowsAdded;
+        public event EventHandler<RowsParsedEventArgs> RowsParsed;
 
-        protected virtual void OnRowsAdded(RowsAddedEventArgs e)
+        protected virtual void OnRowsAdded(RowsParsedEventArgs e)
         {
-            EventHandler<RowsAddedEventArgs> handler = RowsAdded;
+            EventHandler<RowsParsedEventArgs> handler = RowsParsed;
             if (handler != null) handler(this, e);
         }
     }

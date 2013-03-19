@@ -4,6 +4,6 @@ namespace Scut
 {
     public class RowsAddedEventArgs
     {
-        public List<RowViewModel> AddedRows { get; set; }
+        public List<string> Rows { get; set; }
     }
 }
