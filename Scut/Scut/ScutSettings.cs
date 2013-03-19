@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace Scut
 {
@@ -15,9 +16,16 @@ namespace Scut
             };
 
             ColumnSeparator = '|';
+            Filters = new List<IFilter>
+            {
+                new ContainsTextFilter { Color = Colors.GreenYellow, Text = "packet" },
+                new ContainsTextFilter { Hide = true, Text = "repository" }
+            };
         }
 
         public List<ColumnSetting> ColumnSettings { get; set; }
+
+        public List<IFilter> Filters { get; private set; } 
 
         public char ColumnSeparator { get; set; }
     }

@@ -49,7 +49,10 @@ namespace Scut
         {
             Data = Raw.Split(settings.ColumnSeparator);
 
-            // TODO: Filtering, colors etc
+            foreach (var filter in settings.Filters)
+            {
+                filter.Filter(this);
+            }
         }
     }
 }

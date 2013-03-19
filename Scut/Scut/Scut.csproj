@@ -55,6 +55,8 @@
     <Compile Include="ColumnSetting.cs" />
     <Compile Include="FileWatcher.cs" />
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="IFilter.cs" />
     <Compile Include="WindowPlacement.cs" />
     <Compile Include="MockRowParser.cs" />
     <Compile Include="Properties\Annotations.cs" />
