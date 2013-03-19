@@ -38,12 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -62,6 +58,7 @@
     <Compile Include="MockRowParser.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="IRowParser.cs" />
+    <Compile Include="RowParser.cs" />
     <Compile Include="RowsAddedEventArgs.cs" />
     <Compile Include="RowsParsedEventArgs.cs" />
     <Compile Include="RowViewModel.cs" />
@@ -105,6 +102,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="testlog.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

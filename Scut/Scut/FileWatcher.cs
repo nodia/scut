@@ -30,7 +30,7 @@ namespace Scut
                 {
                     return false;
                 }
-                var pathName = Path.GetDirectoryName(path);
+                var pathName = Path.GetDirectoryName(Path.GetFullPath(path));
                 var fileName = Path.GetFileName(path);
                 if (pathName == null || fileName == null)
                 {
@@ -48,12 +48,17 @@ namespace Scut
             }
 
             _watcher.Changed += WatcherChanged;
+            _watcher.EnableRaisingEvents = true;
             return true;
         }
 
         private void ReadToEnd()
         {
             var strings = _reader.ReadToEnd().Split(_splitters, StringSplitOptions.None).ToList();
+            if (String.IsNullOrEmpty(strings.Last()))
+            {
+                strings = strings.Take(strings.Count - 1).ToList();
+            }
             OnRowsAdded(new RowsAddedEventArgs { Rows = strings });
         }
 

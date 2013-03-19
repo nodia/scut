@@ -23,8 +23,7 @@ namespace Scut
         {
             const int columnCount = 4;
 
-            var args = new RowsParsedEventArgs();
-            args.ParsedRows = new List<RowViewModel>();
+            var args = new RowsParsedEventArgs { ParsedRows = new List<RowViewModel>() };
             foreach (var i in Enumerable.Range(0, _random.Next(1, 3)))
             {
                 var rowViewModel = new RowViewModel { Data = Enumerable.Range(0, columnCount).Select(j => RandomString()).ToList() };

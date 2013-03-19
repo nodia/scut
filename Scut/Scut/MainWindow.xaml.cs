@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
-using Microsoft.Win32;
+using System.Windows.Threading;
 
 namespace Scut
 {
@@ -14,8 +14,8 @@ namespace Scut
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FileWatcher _watcher;
         public ScutSettings ScutSettings { get; set; }
-        public IRowParser RowParser { get; set; }
 
         public ObservableCollection<RowViewModel> Rows { get; private set; }
 
@@ -23,13 +23,6 @@ namespace Scut
         {
             Rows = new ObservableCollection<RowViewModel>();
             InitializeComponent();
-
-            ScutSettings = new ScutSettings();
-            RowParser = new MockRowParser();
-
-            CreateGrid(ScutSettings.ColumnSettings);
-
-            RowParser.RowsParsed += ParserOnRowsAdded;
         }
 
         private void CreateGrid(List<ColumnSetting> columns)
@@ -48,13 +41,37 @@ namespace Scut
 
         private void ParserOnRowsAdded(object sender, RowsParsedEventArgs rowsAddedEventArgs)
         {
-            // inject into grid
-            foreach (var rowViewModel in rowsAddedEventArgs.ParsedRows)
+            Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
-                Console.WriteLine(String.Join(", ", rowViewModel.Data));
-                RowViewModel model = rowViewModel;
-                Dispatcher.Invoke(() => Rows.Add(model));
+                // inject into grid
+                foreach (var rowViewModel in rowsAddedEventArgs.ParsedRows)
+                {
+                    Rows.Add(rowViewModel);
+                }
+            }));
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ScutSettings = new ScutSettings();
+
+            _watcher = new FileWatcher();
+
+            const string filename = "testlog.txt";
+            var parser = new RowParser(ScutSettings, _watcher);
+            parser.RowsParsed += ParserOnRowsAdded;
+
+            var success = _watcher.Watch(filename);
+            if (success)
+            {
+                Title = "Tailing: " + Path.GetFullPath(filename);
             }
+            else
+            {
+                Title = "Error opening: " + Path.GetFullPath(filename);
+            }
+
+            CreateGrid(ScutSettings.ColumnSettings);
         }
 
         private void Open(object sender, RoutedEventArgs e)

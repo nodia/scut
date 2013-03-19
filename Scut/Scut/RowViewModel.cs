@@ -42,5 +42,14 @@ namespace Scut
         }
 
         public IList<string> Data { get; set; }
+
+        public string Raw { get; set; }
+
+        public void Parse(ScutSettings settings)
+        {
+            Data = Raw.Split(settings.ColumnSeparator);
+
+            // TODO: Filtering, colors etc
+        }
     }
 }

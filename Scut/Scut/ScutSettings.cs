@@ -13,8 +13,12 @@ namespace Scut
                 new ColumnSetting { Name = "Tag" },
                 new ColumnSetting { Name = "Message" },
             };
+
+            ColumnSeparator = '|';
         }
 
         public List<ColumnSetting> ColumnSettings { get; set; }
+
+        public char ColumnSeparator { get; set; }
     }
 }
