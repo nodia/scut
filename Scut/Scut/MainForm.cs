@@ -322,5 +322,28 @@ namespace Scut
 
             Search(_textBoxSearch.Text);
         }
+
+        private void BtnFiltersClick(object sender, EventArgs e)
+        {
+            var filterForm = new FilterForm();
+            filterForm.SetFilters(_settings.Filters);
+            var result = filterForm.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                var filters = filterForm.GetFilters();
+                _settings.Filters.Clear();
+                _settings.Filters.AddRange(filters);
+                SerializeSettings();
+                ReloadSettings();
+            }
+        }
+
+        private void ReloadSettings()
+        {
+            if (_fileName != null)
+            {
+                OpenFile(_fileName);
+            }
+        }
     }
 }

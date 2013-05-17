@@ -68,7 +68,19 @@
     </Compile>
     <Compile Include="FileWatcher.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="Filter.cs" />
+    <Compile Include="ContainsTextFilter.cs" />
+    <Compile Include="ContainsTextFilterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ContainsTextFilterControl.Designer.cs">
+      <DependentUpon>ContainsTextFilterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterForm.Designer.cs">
+      <DependentUpon>FilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="IFilter.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -111,6 +123,12 @@
     </Compile>
     <EmbeddedResource Include="ColumnSettingsForm.resx">
       <DependentUpon>ColumnSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ContainsTextFilterControl.resx">
+      <DependentUpon>ContainsTextFilterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterForm.resx">
+      <DependentUpon>FilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

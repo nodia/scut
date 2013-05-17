@@ -34,13 +34,14 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.columnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonScrollLock = new System.Windows.Forms.ToolStripButton();
             this.btnRegex = new System.Windows.Forms.ToolStripButton();
             this.btnCaseSensitive = new System.Windows.Forms.ToolStripButton();
             this._textBoxSearch = new Scut.CueToolStripTextBox();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.columnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnFilters = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -94,13 +95,29 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.columnsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // columnsToolStripMenuItem
+            // 
+            this.columnsToolStripMenuItem.Name = "columnsToolStripMenuItem";
+            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.columnsToolStripMenuItem.Text = "Columns";
+            this.columnsToolStripMenuItem.Click += new System.EventHandler(this.ColumnsToolStripMenuItemClick);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonScrollLock,
             this.btnRegex,
             this.btnCaseSensitive,
-            this._textBoxSearch});
+            this._textBoxSearch,
+            this.btnFilters});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(748, 25);
@@ -148,20 +165,14 @@
             this._textBoxSearch.Size = new System.Drawing.Size(200, 25);
             this._textBoxSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSearchKeyUp);
             // 
-            // settingsToolStripMenuItem
+            // btnFilters
             // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.columnsToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // columnsToolStripMenuItem
-            // 
-            this.columnsToolStripMenuItem.Name = "columnsToolStripMenuItem";
-            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.columnsToolStripMenuItem.Text = "Columns";
-            this.columnsToolStripMenuItem.Click += new System.EventHandler(this.ColumnsToolStripMenuItemClick);
+            this.btnFilters.Image = ((System.Drawing.Image)(resources.GetObject("btnFilters.Image")));
+            this.btnFilters.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnFilters.Name = "btnFilters";
+            this.btnFilters.Size = new System.Drawing.Size(58, 22);
+            this.btnFilters.Text = "Filters";
+            this.btnFilters.Click += new System.EventHandler(this.BtnFiltersClick);
             // 
             // MainForm
             // 
@@ -204,5 +215,6 @@
         private System.Windows.Forms.ToolStripButton btnRegex;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem columnsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btnFilters;
     }
 }
