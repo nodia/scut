@@ -16,6 +16,9 @@ namespace Scut
         private FileWatcher _watcher;
         private string _lastSearchString;
 
+        private string _exampleRow;
+        private string _fileName;
+
         public MainForm()
         {
             InitializeComponent();
@@ -76,8 +79,8 @@ namespace Scut
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                string filename = dialog.FileName;
-                OpenFile(filename);
+                _fileName = dialog.FileName;
+                OpenFile(_fileName);
             }
         }
 
@@ -93,6 +96,7 @@ namespace Scut
 
         private void AddRows(IEnumerable<string> rows)
         {
+            _exampleRow = rows.First();
             var rowArray = rows.Select(row =>
             {
                 var model = RowViewModel.Parse(_settings, row);
@@ -195,8 +199,22 @@ namespace Scut
                 return;
             }
 
-            var file = droppedFilePaths[0];
-            OpenFile(file);
+            _fileName = droppedFilePaths[0];
+            OpenFile(_fileName);
+        }
+
+        private void ColumnsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var newSettings = new ScutSettings(_settings);
+            using (var columnsettings = new ColumnSettingsForm(_exampleRow, newSettings))
+            {
+                if (columnsettings.ShowDialog(this) == DialogResult.OK)
+                {
+                    _settings = newSettings;
+                    CreateGrid(_settings.ColumnSettings);
+                    OpenFile(_fileName);
+                }
+            }
         }
 
         private void Search(string text)

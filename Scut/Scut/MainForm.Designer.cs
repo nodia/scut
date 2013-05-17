@@ -39,6 +39,8 @@
             this.btnRegex = new System.Windows.Forms.ToolStripButton();
             this.btnCaseSensitive = new System.Windows.Forms.ToolStripButton();
             this._textBoxSearch = new Scut.CueToolStripTextBox();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.columnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -54,16 +56,17 @@
             this.gridView.Location = new System.Drawing.Point(0, 49);
             this.gridView.Name = "gridView";
             this.gridView.ReadOnly = true;
-            this.gridView.Size = new System.Drawing.Size(703, 450);
+            this.gridView.Size = new System.Drawing.Size(748, 311);
             this.gridView.TabIndex = 0;
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(703, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(748, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -100,7 +103,7 @@
             this._textBoxSearch});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(703, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(748, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -145,12 +148,27 @@
             this._textBoxSearch.Size = new System.Drawing.Size(200, 25);
             this._textBoxSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSearchKeyUp);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.columnsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // columnsToolStripMenuItem
+            // 
+            this.columnsToolStripMenuItem.Name = "columnsToolStripMenuItem";
+            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.columnsToolStripMenuItem.Text = "Columns";
+            this.columnsToolStripMenuItem.Click += new System.EventHandler(this.ColumnsToolStripMenuItemClick);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 499);
+            this.ClientSize = new System.Drawing.Size(748, 360);
             this.Controls.Add(this.gridView);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -184,5 +202,7 @@
         private CueToolStripTextBox _textBoxSearch;
         private System.Windows.Forms.ToolStripButton btnCaseSensitive;
         private System.Windows.Forms.ToolStripButton btnRegex;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem columnsToolStripMenuItem;
     }
 }

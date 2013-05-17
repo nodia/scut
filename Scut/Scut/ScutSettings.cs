@@ -7,6 +7,17 @@ namespace Scut
     [DataContract]
     public class ScutSettings
     {
+        public ScutSettings()
+        {
+        }
+
+        public ScutSettings(ScutSettings settings)
+        {
+            ColumnSeparator = settings.ColumnSeparator;
+            ColumnSettings = settings.ColumnSettings;
+            Filters = settings.Filters;
+        }
+
         public static ScutSettings CreateDefaults()
         {
             return new ScutSettings {

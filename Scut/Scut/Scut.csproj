@@ -59,6 +59,11 @@
     <Compile Include="ColumnSetting.cs" />
     <Compile Include="CueToolStripTextBox.cs">
       <SubType>Component</SubType>
+    <Compile Include="ColumnSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ColumnSettingsForm.Designer.cs">
+      <DependentUpon>ColumnSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FileWatcher.cs" />
     <Compile Include="EntryPoint.cs" />
@@ -103,6 +108,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="ColumnSettingsForm.resx">
+      <DependentUpon>ColumnSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
