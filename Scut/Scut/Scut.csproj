@@ -57,6 +57,9 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="ColumnSetting.cs" />
+    <Compile Include="CueToolStripTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FileWatcher.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Filter.cs" />

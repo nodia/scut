@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using DataFormats = System.Windows.DataFormats;
@@ -13,10 +14,27 @@ namespace Scut
     {
         private ScutSettings _settings;
         private FileWatcher _watcher;
+        private string _lastSearchString;
 
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.F))
+            {
+                _textBoxSearch.Focus();
+                return true;
+            }
+
+            if (keyData == Keys.F3)
+            {
+                Search(_lastSearchString);
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void CreateGrid(IEnumerable<ColumnSetting> columns)
@@ -181,5 +199,110 @@ namespace Scut
             OpenFile(file);
         }
 
+        private void Search(string text)
+        {
+            _lastSearchString = text;
+
+            if (text == null)
+            {
+                return;
+            }
+
+            if (gridView.Rows.Count == 0)
+            {
+                return;
+            }
+
+            Regex regex = null;
+            if (btnRegex.Checked)
+            {
+                var options = btnCaseSensitive.Checked ? RegexOptions.None : RegexOptions.IgnoreCase;
+                regex = new Regex(text, options);
+            }
+
+            var comparisonType = btnCaseSensitive.Checked ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase;
+
+            int firstRow = gridView.SelectedCells.Count == 0 ? gridView.FirstDisplayedScrollingRowIndex : gridView.SelectedCells[0].RowIndex;
+            gridView.ClearSelection();
+
+            for (int i = firstRow + 1;; i++)
+            {
+                if (i == firstRow)
+                {
+                    break;
+                }
+
+                if (i >= gridView.Rows.Count)
+                {
+                    i = 0;
+                }
+
+                var row = gridView.Rows[i];
+                if (!row.Visible)
+                {
+                    continue;
+                }
+
+                for (int j = 0; j < row.Cells.Count; j++)
+                {
+                    var cell = row.Cells[j];
+                    if (cell.Value == null)
+                    {
+                        continue;
+                    }
+
+                    var s = cell.Value.ToString();
+
+                    if (regex != null ? !regex.IsMatch(s) : s.IndexOf(text, comparisonType) < 0)
+                    {
+                        continue;
+                    }
+
+                    cell.Selected = true;
+                    var displayCount = gridView.DisplayedRowCount(false);
+                    if (i < gridView.FirstDisplayedScrollingRowIndex || i >= gridView.FirstDisplayedScrollingRowIndex + displayCount)
+                    {
+                        var rowIndex = FindVisibleRow(i - displayCount / 2);
+                        if (rowIndex >= 0) // rowIndex is -1 if no visible lines found
+                        {
+                            gridView.FirstDisplayedScrollingRowIndex = rowIndex;
+                        }
+                    }
+
+                    return;
+                }
+            }
+        }
+
+        private int FindVisibleRow(int i)
+        {
+            var rowIndex = Math.Max(0, i);
+            int dir = -1;
+            while (!gridView.Rows[rowIndex].Visible)
+            {
+                rowIndex += dir;
+                if (rowIndex == -1)
+                {
+                    dir = 1;
+                    rowIndex = 0;
+                }
+
+                if (rowIndex >= gridView.Rows.Count)
+                {
+                    return -1;
+                }
+            }
+            return rowIndex;
+        }
+
+        private void TextBoxSearchKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter)
+            {
+                return;
+            }
+
+            Search(_textBoxSearch.Text);
+        }
     }
 }

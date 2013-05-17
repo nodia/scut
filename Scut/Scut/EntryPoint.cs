@@ -10,6 +10,7 @@ namespace Scut
         {
             //App.Main();
             var window = new MainForm();
+            Application.EnableVisualStyles();
             Application.Run(window);
         }
     }

@@ -36,7 +36,9 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonScrollLock = new System.Windows.Forms.ToolStripButton();
-            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.btnRegex = new System.Windows.Forms.ToolStripButton();
+            this.btnCaseSensitive = new System.Windows.Forms.ToolStripButton();
+            this._textBoxSearch = new Scut.CueToolStripTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -52,7 +54,7 @@
             this.gridView.Location = new System.Drawing.Point(0, 49);
             this.gridView.Name = "gridView";
             this.gridView.ReadOnly = true;
-            this.gridView.Size = new System.Drawing.Size(284, 213);
+            this.gridView.Size = new System.Drawing.Size(703, 450);
             this.gridView.TabIndex = 0;
             // 
             // menuStrip1
@@ -61,7 +63,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(284, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(703, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -93,10 +95,12 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonScrollLock,
-            this.toolStripTextBox1});
+            this.btnRegex,
+            this.btnCaseSensitive,
+            this._textBoxSearch});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(284, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(703, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -111,23 +115,46 @@
             this.toolStripButtonScrollLock.Size = new System.Drawing.Size(81, 22);
             this.toolStripButtonScrollLock.Text = "Scroll lock";
             // 
-            // toolStripTextBox1
+            // btnRegex
             // 
-            this.toolStripTextBox1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.ReadOnly = true;
-            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 25);
-            this.toolStripTextBox1.Text = "Search";
+            this.btnRegex.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnRegex.CheckOnClick = true;
+            this.btnRegex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnRegex.Image = ((System.Drawing.Image)(resources.GetObject("btnRegex.Image")));
+            this.btnRegex.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRegex.Name = "btnRegex";
+            this.btnRegex.Size = new System.Drawing.Size(42, 22);
+            this.btnRegex.Text = "Regex";
+            // 
+            // btnCaseSensitive
+            // 
+            this.btnCaseSensitive.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnCaseSensitive.CheckOnClick = true;
+            this.btnCaseSensitive.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnCaseSensitive.Image = ((System.Drawing.Image)(resources.GetObject("btnCaseSensitive.Image")));
+            this.btnCaseSensitive.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnCaseSensitive.Name = "btnCaseSensitive";
+            this.btnCaseSensitive.Size = new System.Drawing.Size(84, 22);
+            this.btnCaseSensitive.Text = "Case sensitive";
+            // 
+            // _textBoxSearch
+            // 
+            this._textBoxSearch.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this._textBoxSearch.CueText = "Search";
+            this._textBoxSearch.Name = "_textBoxSearch";
+            this._textBoxSearch.Size = new System.Drawing.Size(200, 25);
+            this._textBoxSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSearchKeyUp);
             // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(703, 499);
             this.Controls.Add(this.gridView);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Scut";
@@ -154,6 +181,8 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButtonScrollLock;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private CueToolStripTextBox _textBoxSearch;
+        private System.Windows.Forms.ToolStripButton btnCaseSensitive;
+        private System.Windows.Forms.ToolStripButton btnRegex;
     }
 }
