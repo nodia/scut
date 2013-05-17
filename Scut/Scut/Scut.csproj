@@ -59,6 +59,7 @@
     <Compile Include="ColumnSetting.cs" />
     <Compile Include="CueToolStripTextBox.cs">
       <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ColumnSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
